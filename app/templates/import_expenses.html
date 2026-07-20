@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}Import Expenses{% endblock %}
+{% block page_title %}Import Expenses{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body p-4">
+                <h5 class="mb-1">Import from CSV</h5>
+                <p class="text-secondary small">
+                    Columns required: <code>title</code>, <code>amount</code>, <code>date</code>, <code>category</code>.
+                    Optional: <code>recurring</code> (value "recurring") and <code>frequency</code>.
+                </p>
+                <form method="POST" enctype="multipart/form-data" action="{{ url_for('expenses.import_expenses') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="file" class="form-control mb-3" name="file" accept=".csv" required>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-upload me-1"></i>Import</button>
+                    <a href="{{ url_for('expenses.export_expenses') }}" class="btn btn-outline-secondary">Download a sample export first</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

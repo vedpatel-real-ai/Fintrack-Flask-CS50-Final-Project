@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% block title %}Expenses{% endblock %}
+{% block page_title %}Expenses{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div class="text-secondary small">{{ total_count }} expense{{ 's' if total_count != 1 }} found</div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('expenses.view_shared_expenses') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-people-fill me-1"></i>Shared With Me
+        </a>
+        <a href="{{ url_for('expenses.export_expenses') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-download me-1"></i>Export CSV
+        </a>
+        <a href="{{ url_for('expenses.add_expense') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg me-1"></i>Add Expense
+        </a>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="GET" class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small">Search</label>
+                <input type="text" class="form-control form-control-sm" name="search" value="{{ filters.search }}" placeholder="Title contains…">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small">Category</label>
+                <select class="form-select form-select-sm" name="category">
+                    <option value="All" {{ 'selected' if filters.category == 'All' }}>All</option>
+                    {% for c in categories %}
+                    <option value="{{ c }}" {{ 'selected' if c == filters.category }}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small">From</label>
+                <input type="date" class="form-control form-control-sm" name="start_date" value="{{ filters.start_date }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small">To</label>
+                <input type="date" class="form-control form-control-sm" name="end_date" value="{{ filters.end_date }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small">Sort by</label>
+                <select class="form-select form-select-sm" name="sort_by">
+                    <option value="date" {{ 'selected' if filters.sort_by == 'date' }}>Date</option>
+                    <option value="amount" {{ 'selected' if filters.sort_by == 'amount' }}>Amount</option>
+                    <option value="category" {{ 'selected' if filters.sort_by == 'category' }}>Category</option>
+                    <option value="title" {{ 'selected' if filters.sort_by == 'title' }}>Title (A–Z)</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary btn-sm w-100">Go</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        {% if expenses %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr><th>Title</th><th>Category</th><th>Date</th><th>Type</th><th class="text-end">Amount</th><th></th></tr>
+                </thead>
+                <tbody>
+                {% for expense in expenses %}
+                    <tr>
+                        <td>{{ expense.title }}</td>
+                        <td><span class="category-pill">{{ expense.category }}</span></td>
+                        <td class="text-secondary">{{ expense.date }}</td>
+                        <td class="text-secondary small">{{ expense.is_recurring }}</td>
+                        <td class="text-end">{{ expense.converted_amount | format_currency(selected_currency) }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('expenses.share_expense', expense_id=expense.id) }}" class="btn btn-sm btn-outline-secondary" title="Share">
+                                <i class="bi bi-share"></i>
+                            </a>
+                            <form action="{{ url_for('expenses.delete_expense', expense_id=expense.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this expense?');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-receipt"></i>
+            <p class="mb-2">No expenses match these filters.</p>
+            <a href="{{ url_for('expenses.add_expense') }}" class="btn btn-sm btn-primary">Add an expense</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if total_pages > 1 %}
+<nav class="mt-3" aria-label="Expense pages">
+    <ul class="pagination pagination-sm justify-content-center">
+        {% for p in range(1, total_pages + 1) %}
+        <li class="page-item {{ 'active' if p == page }}">
+            <a class="page-link" href="{{ url_for('expenses.view_expenses', page=p, **filters) }}">{{ p }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

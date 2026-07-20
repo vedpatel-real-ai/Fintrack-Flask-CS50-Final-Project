@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %}Add Income{% endblock %}
+{% block page_title %}Add Income{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('income.add_income') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Source</label>
+                            <input type="text" class="form-control" name="source" placeholder="e.g. Salary" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Amount</label>
+                            <input type="number" step="0.01" min="0.01" class="form-control" name="amount" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control" name="date" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Currency</label>
+                            <select class="form-select" name="currency">
+                                {% for c in ['USD', 'EUR', 'GBP', 'JPY', 'INR'] %}
+                                <option value="{{ c }}" {{ 'selected' if c == selected_currency }}>{{ c }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" name="category">
+                                <option value="">Select existing…</option>
+                                {% for c in categories %}
+                                <option value="{{ c }}">{{ c }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Or new category</label>
+                            <input type="text" class="form-control" name="new_category" placeholder="e.g. Bonus">
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Save Income</button>
+                        <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

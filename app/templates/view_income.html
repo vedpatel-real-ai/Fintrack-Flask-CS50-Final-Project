@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}Income{% endblock %}
+{% block page_title %}Income{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="text-secondary small">Total: <strong>{{ total_income | format_currency(selected_currency) }}</strong></div>
+    <a href="{{ url_for('income.add_income') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Add Income</a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        {% if income_entries %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead><tr><th>Source</th><th>Category</th><th>Date</th><th class="text-end">Amount</th><th></th></tr></thead>
+                <tbody>
+                {% for entry in income_entries %}
+                    <tr>
+                        <td>{{ entry.source }}</td>
+                        <td><span class="category-pill">{{ entry.category }}</span></td>
+                        <td class="text-secondary">{{ entry.date }}</td>
+                        <td class="text-end">{{ entry.converted_amount | format_currency(selected_currency) }}</td>
+                        <td class="text-end">
+                            <form action="{{ url_for('income.delete_income', income_id=entry.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this income entry?');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-cash-coin"></i>
+            <p class="mb-2">No income recorded yet.</p>
+            <a href="{{ url_for('income.add_income') }}" class="btn btn-sm btn-primary">Add income</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}Settings{% endblock %}
+{% block page_title %}Settings{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card mb-3">
+            <div class="card-body p-4">
+                <h6 class="mb-3">Currency</h6>
+                <form method="POST" action="{{ url_for('settings.set_currency') }}" class="d-flex gap-2">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <select class="form-select" name="currency">
+                        {% for c in currencies %}
+                        <option value="{{ c }}" {{ 'selected' if c == currency }}>{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary text-nowrap">Save</button>
+                </form>
+                <p class="text-muted small mt-2 mb-0">All amounts across the app display in this currency.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body p-4">
+                <h6 class="mb-3">Appearance</h6>
+                <p class="text-muted small mb-2">Use the moon icon in the top bar to toggle dark mode. Your preference is saved in this browser.</p>
+                <button class="btn btn-outline-secondary" id="settingsThemeToggle"><i class="bi bi-moon-stars-fill me-1"></i>Toggle Dark Mode</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('settingsThemeToggle').addEventListener('click', function () {
+        document.getElementById('themeToggle').click();
+    });
+</script>
+{% endblock %}

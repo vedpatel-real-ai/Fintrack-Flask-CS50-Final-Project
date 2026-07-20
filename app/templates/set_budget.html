@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}Set Budget{% endblock %}
+{% block page_title %}Set Budget{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('budgets.set_budget') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" name="category">
+                                <option value="">Select existing…</option>
+                                {% for c in categories %}
+                                <option value="{{ c.category_name }}">{{ c.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Or new category</label>
+                            <input type="text" class="form-control" name="new_category" placeholder="e.g. Subscriptions">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Monthly Budget</label>
+                            <input type="number" step="0.01" min="0.01" class="form-control" name="monthly_budget" required>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Save Budget</button>
+                        <a href="{{ url_for('budgets.view_budgets') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

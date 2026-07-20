@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="guest-hero">
+    <div class="card auth-card shadow-sm">
+        <div class="card-body p-4">
+            <h3 class="mb-1">Create your account</h3>
+            <p class="text-secondary mb-4">It takes less than a minute.</p>
+
+            <form method="POST" action="{{ url_for('auth.register') }}" novalidate id="registerForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ username or '' }}" required minlength="3" autofocus autocomplete="username">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required minlength="8" autocomplete="new-password">
+                    <div class="progress mt-2" style="height: 6px;">
+                        <div id="strengthBar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                    </div>
+                    <div id="strengthLabel" class="form-text">At least 8 characters.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Create Account</button>
+            </form>
+
+            <p class="text-center small text-muted mt-3 mb-0">
+                Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Small, self-contained password strength meter -- no library needed.
+    var passwordInput = document.getElementById('password');
+    var strengthBar = document.getElementById('strengthBar');
+    var strengthLabel = document.getElementById('strengthLabel');
+
+    passwordInput.addEventListener('input', function () {
+        var value = passwordInput.value;
+        var score = 0;
+        if (value.length >= 8) score += 1;
+        if (value.length >= 12) score += 1;
+        if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score += 1;
+        if (/[0-9]/.test(value)) score += 1;
+        if (/[^A-Za-z0-9]/.test(value)) score += 1;
+
+        var levels = [
+            { pct: 20, label: 'Very weak', cls: 'bg-danger' },
+            { pct: 40, label: 'Weak', cls: 'bg-danger' },
+            { pct: 60, label: 'Fair', cls: 'bg-warning' },
+            { pct: 80, label: 'Good', cls: 'bg-info' },
+            { pct: 100, label: 'Strong', cls: 'bg-success' },
+        ];
+        var level = levels[Math.min(score, levels.length - 1)];
+        strengthBar.style.width = value ? level.pct + '%' : '0%';
+        strengthBar.className = 'progress-bar ' + level.cls;
+        strengthLabel.textContent = value ? level.label : 'At least 8 characters.';
+    });
+</script>
+{% endblock %}

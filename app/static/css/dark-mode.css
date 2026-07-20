@@ -1,0 +1,4 @@
+/* Kept for backward-compatibility with the original project structure.
+   Dark mode is now handled entirely through Bootstrap 5's data-bs-theme
+   attribute and CSS variables in styles.css, so this file intentionally
+   has nothing left to override. */

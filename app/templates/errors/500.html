@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Something Went Wrong{% endblock %}
+{% block content %}
+<div class="guest-hero">
+    <div class="text-center">
+        <div class="stat-icon mx-auto mb-3" style="width:64px;height:64px;font-size:1.6rem;"><i class="bi bi-exclamation-triangle-fill"></i></div>
+        <h2>500 — Something Went Wrong</h2>
+        <p class="text-secondary">{{ message or "An unexpected error occurred. Please try again." }}</p>
+        <a href="{{ url_for('auth.index') }}" class="btn btn-primary mt-2">Go Home</a>
+    </div>
+</div>
+{% endblock %}

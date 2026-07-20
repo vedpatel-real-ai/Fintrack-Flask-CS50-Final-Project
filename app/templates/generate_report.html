@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}Generate Report{% endblock %}
+{% block page_title %}Generate Report{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body p-4">
+                <h5 class="mb-1">Export your expenses</h5>
+                <p class="text-secondary small mb-4">Download a formatted report of every expense and recurring expense on file.</p>
+
+                {% if not has_expenses %}
+                <div class="alert alert-info">You don't have any expenses yet -- the report will be empty until you add some.</div>
+                {% endif %}
+
+                <form method="POST" action="{{ url_for('reports.generate_report') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Report Currency</label>
+                            <select class="form-select" name="report_currency">
+                                {% for c in ['USD', 'EUR', 'GBP', 'JPY', 'INR'] %}
+                                <option value="{{ c }}">{{ c }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Format</label>
+                            <select class="form-select" name="report_type">
+                                <option value="pdf">PDF</option>
+                                <option value="excel">Excel (.xlsx)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-4"><i class="bi bi-download me-1"></i>Download Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

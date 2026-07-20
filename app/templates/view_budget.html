@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}Budgets{% endblock %}
+{% block page_title %}Budgets{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-end mb-3">
+    <a href="{{ url_for('budgets.set_budget') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Set Budget</a>
+</div>
+
+{% if budgets %}
+<div class="row g-3">
+    {% for b in budgets %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h6 class="mb-0">{{ b.category }}</h6>
+                    <form action="{{ url_for('budgets.delete_budget', budget_id=b.id) }}" method="POST" onsubmit="return confirm('Delete this budget?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
+                    </form>
+                </div>
+                <div class="small text-muted mb-1">{{ b.spent | round(2) }} / {{ b.monthly_budget | round(2) }} spent this month</div>
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar {{ 'bg-danger-subtle' if b.percent >= 100 }}" style="width: {{ b.percent }}%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card"><div class="card-body">
+    <div class="empty-state">
+        <i class="bi bi-pie-chart"></i>
+        <p class="mb-2">No budgets set yet.</p>
+        <a href="{{ url_for('budgets.set_budget') }}" class="btn btn-sm btn-primary">Set your first budget</a>
+    </div>
+</div></div>
+{% endif %}
+{% endblock %}

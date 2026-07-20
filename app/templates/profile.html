@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}Profile{% endblock %}
+{% block page_title %}Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="stat-icon" style="width:56px;height:56px;font-size:1.4rem;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">{{ user.username }}</h5>
+                        <div class="text-muted small">Member since {{ user.created_at }}</div>
+                    </div>
+                </div>
+
+                {% if user.is_demo %}
+                <div class="alert alert-info small">Profile editing is disabled for the demo account.</div>
+                {% endif %}
+
+                <form method="POST" action="{{ url_for('profile.index') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" name="username" value="{{ user.username }}" {{ 'disabled' if user.is_demo }} required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" class="form-control" name="password" minlength="8" {{ 'disabled' if user.is_demo }} required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" {{ 'disabled' if user.is_demo }}>Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

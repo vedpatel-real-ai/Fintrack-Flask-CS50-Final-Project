@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Share Expense{% endblock %}
+{% block page_title %}Share Expense{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body p-4">
+                <h5 class="mb-3">Share this expense</h5>
+                <form method="POST" action="{{ url_for('expenses.share_expense', expense_id=expense_id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <label class="form-label">Share with (username)</label>
+                    <input type="text" class="form-control mb-3" name="shared_with" required autofocus>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Share</button>
+                        <a href="{{ url_for('expenses.view_expenses') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

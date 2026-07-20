@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class="guest-hero">
+    <div class="row g-4 align-items-center" style="max-width: 1000px;">
+        <div class="col-lg-6">
+            <span class="badge text-bg-light border mb-3">CS50-inspired portfolio project</span>
+            <h1 class="display-6 mb-3">Track your money without the spreadsheet headache.</h1>
+            <p class="text-secondary mb-4">
+                FinTrack is a Flask + SQLite expense tracker: log expenses and income,
+                set category budgets, visualize spending, and generate PDF/Excel reports.
+            </p>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <a href="{{ url_for('auth.demo') }}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-rocket-takeoff-fill me-1"></i> Try Demo
+                </a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-secondary btn-lg">Create an account</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-link btn-lg">Log in</a>
+            </div>
+            <ul class="feature-list">
+                <li><i class="bi bi-check-circle-fill"></i> Track and categorize expenses & income</li>
+                <li><i class="bi bi-check-circle-fill"></i> Set monthly budgets with progress tracking</li>
+                <li><i class="bi bi-check-circle-fill"></i> Visual reports and PDF/Excel exports</li>
+                <li><i class="bi bi-check-circle-fill"></i> Recurring expenses & shared expenses</li>
+                <li><i class="bi bi-check-circle-fill"></i> CSV import, multi-currency, dark mode</li>
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-sm p-4">
+                <div class="card-body">
+                    <h5 class="mb-3"><i class="bi bi-grid-1x2-fill text-primary me-2"></i>What's inside</h5>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="stat-card"><div><div class="stat-label">Expenses</div><div class="stat-value">CRUD</div></div></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card"><div><div class="stat-label">Auth</div><div class="stat-value">Sessions</div></div></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card"><div><div class="stat-label">Reports</div><div class="stat-value">PDF/XLSX</div></div></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card"><div><div class="stat-label">Charts</div><div class="stat-value">Chart.js</div></div></div>
+                        </div>
+                    </div>
+                    <p class="text-muted small mt-3 mb-0">No registration needed to look around &mdash; use the demo above.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
