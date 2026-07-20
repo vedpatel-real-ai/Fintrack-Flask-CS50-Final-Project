@@ -2,7 +2,7 @@ Flask==3.0.3
 Flask-WTF==1.2.1
 Werkzeug==3.0.3
 cs50==9.4.0
-pandas==2.2.2
+pandas==2.2.3
 reportlab==4.2.2
 requests==2.32.3
 gunicorn==22.0.0
